@@ -58,7 +58,7 @@ jobs:
         working-directory: ${{ env.TF_WORKING_DIR }}
         run: terraform init -input=false
 
-      # 🧮 Step 5: Terraform Plan / Apply / Destroy
+      #  Step 5: Terraform Plan / Apply / Destroy
       - name: Terraform ${{ github.event.inputs.action }}
         working-directory: ${{ env.TF_WORKING_DIR }}
         run: |
