@@ -9,11 +9,11 @@ terraform {
   }
 
   backend "azurerm" {
-   resource_group_name  = "pwc"
+    resource_group_name  = "pwc"
     storage_account_name = "00terraformpwc"
-    container_name       = "tfstate"      # or whatever container you created
+    container_name       = "tfstate"
     key                  = "terraform.tfstate"
-  
+    use_oidc             = true
   }
 }
 
