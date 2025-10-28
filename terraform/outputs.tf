@@ -43,8 +43,3 @@ output "aks_node_resource_group" {
   description = "Resource group containing AKS nodes"
   value       = azurerm_kubernetes_cluster.main.node_resource_group
 }
-
-output "small_node_pool_name" {
-  description = "Name of the small node pool"
-  value       = azurerm_kubernetes_cluster_node_pool.small.name
-}
