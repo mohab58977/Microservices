@@ -49,7 +49,7 @@ variable "aks_dns_prefix" {
 variable "kubernetes_version" {
   description = "Kubernetes version"
   type        = string
-  default     = "1.29.2"
+  default     = "1.34"
 }
 
 variable "default_node_count" {
