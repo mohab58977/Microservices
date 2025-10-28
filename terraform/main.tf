@@ -4,7 +4,7 @@ terraform {
   required_providers {
     azurerm = {
       source  = "hashicorp/azurerm"
-      version = "~> 3.0"
+      version = "~> 4.5"
     }
   }
 
@@ -16,6 +16,7 @@ terraform {
     use_oidc             = true
   }
 }
+
 
 provider "azurerm" {
   features {}
@@ -54,16 +55,19 @@ resource "azurerm_kubernetes_cluster" "main" {
   resource_group_name = azurerm_resource_group.main.name
   dns_prefix          = var.aks_dns_prefix
   kubernetes_version  = var.kubernetes_version
+  sku_tier            = "Free"
 
   default_node_pool {
-    name                = "default"
-    node_count          = var.default_node_count
-    vm_size             = var.default_node_vm_size
-    vnet_subnet_id      = azurerm_subnet.aks.id
-    enable_auto_scaling = var.enable_auto_scaling
-    min_count           = var.enable_auto_scaling ? var.min_node_count : null
-    max_count           = var.enable_auto_scaling ? var.max_node_count : null
-    os_disk_size_gb     = 30
+    name                   = "default"
+    node_count             = var.default_node_count
+    vm_size                = var.default_node_vm_size
+    vnet_subnet_id         = azurerm_subnet.aks.id
+    auto_scaling_enabled   = var.enable_auto_scaling
+    min_count              = var.enable_auto_scaling ? var.min_node_count : null
+    max_count              = var.enable_auto_scaling ? var.max_node_count : null
+    os_disk_size_gb        = 30
+    os_sku                 = "Ubuntu"
+    temporary_name_for_rotation = "defaulttmp"
   }
 
   identity {
@@ -71,25 +75,13 @@ resource "azurerm_kubernetes_cluster" "main" {
   }
 
   network_profile {
-    network_plugin     = "azure"
-    network_policy     = "azure"
-    load_balancer_sku  = "standard"
-    service_cidr       = var.service_cidr
-    dns_service_ip     = var.dns_service_ip
+    network_plugin    = "azure"
+    network_policy    = "azure"
+    load_balancer_sku = "standard"
+    service_cidr      = var.service_cidr
+    dns_service_ip    = var.dns_service_ip
   }
 
   tags = var.tags
 }
 
-# Additional Managed Node Pool (Small)
-resource "azurerm_kubernetes_cluster_node_pool" "small" {
-  name                  = "small"
-  kubernetes_cluster_id = azurerm_kubernetes_cluster.main.id
-  vm_size               = "Standard_B2s"
-  node_count            = 1
-  vnet_subnet_id        = azurerm_subnet.aks.id
-  enable_auto_scaling   = false
-  os_disk_size_gb       = 30
-
-  tags = var.tags
-}
