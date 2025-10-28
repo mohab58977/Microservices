@@ -7,7 +7,7 @@ variable "resource_group_name" {
 variable "location" {
   description = "Azure region for resources"
   type        = string
-  default     = "eastus"
+  default     = "westeurope"
 }
 
 variable "vnet_name" {
@@ -61,7 +61,7 @@ variable "default_node_count" {
 variable "default_node_vm_size" {
   description = "VM size for the default node pool"
   type        = string
-  default     = "Standard_D2s_v3"
+  default     = "Standard_B2s"
 }
 
 variable "enable_auto_scaling" {
