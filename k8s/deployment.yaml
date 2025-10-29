@@ -5,7 +5,7 @@ metadata:
   labels:
     app: microservices-app
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: microservices-app
@@ -32,13 +32,17 @@ spec:
             cpu: "200m"
         livenessProbe:
           httpGet:
-            path: /
+            path: /health
             port: 5000
-          initialDelaySeconds: 30
+          initialDelaySeconds: 10
           periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
         readinessProbe:
           httpGet:
-            path: /
+            path: /health
             port: 5000
           initialDelaySeconds: 5
           periodSeconds: 5
+          timeoutSeconds: 5
+          failureThreshold: 3
