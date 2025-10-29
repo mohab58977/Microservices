@@ -8,12 +8,12 @@ on:
         required: true
         default: 'main'
         type: string
-  pull_request:
-    branches: [main, master]
-    paths-ignore:
-      - 'helm/node-hello/values.yaml'
-      - '**.md'
-      - 'images/'
+  # pull_request:
+  #   branches: [main, master]
+  #   paths-ignore:
+  #     - 'helm/node-hello/values.yaml'
+  #     - '**.md'
+  #     - 'images/'
 
 permissions:
   id-token: write   # Required for OIDC
