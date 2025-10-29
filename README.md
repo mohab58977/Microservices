@@ -1,21 +1,67 @@
-### Simple terraform code is provided to deploy an aks cluster on azure
-### Simple terraform pipeline is created to  authenticate and deploy Infra to my azure account using terraform
-### Simple cicd pipeline is created to create the docker image push to github registry and deploy to my aks cluster on azure
+# Microservices on AKS
 
-### manual steps:
-## create oidc on azure for github
-## create a blob storage for terraform backend
-## create monitoring stack via helm from azure cloudshell or we can enable managed prometheus and grafana form azure
-# 1. Add the Prometheus Community Helm repo
+Flask microservices app running on Azure Kubernetes with automated CI/CD.
+
+## What's Included
+
+- **Flask API** with user/product endpoints
+- **Terraform** for AKS infrastructure
+- **CI/CD pipeline** - builds Docker images and deploys to AKS
+- **Kubernetes manifests** with health checks and monitoring
+
+## Quick Setup
+
+### 1. Azure OIDC Authentication
+
+Configure GitHub Actions to authenticate with Azure using OIDC (no secrets needed).
+
+Add these to GitHub repo secrets:
+- `AZURE_CLIENT_ID`
+- `AZURE_TENANT_ID` 
+- `AZURE_SUBSCRIPTION_ID`
+
+### 2. Terraform Backend Storage
+
+```bash
+az group create --name pwc --location westeurope
+az storage account create --name 00terraformpwc --resource-group pwc
+az storage container create --name tfstate --account-name 00terraformpwc
+```
+
+### 3. Deploy Infrastructure
+
+Run **Terraform Azure Pipeline** workflow:
+- Action: `apply`
+- Environment: `dev`
+
+Creates: VNet, AKS cluster (`aks-microservices`), resource group (`rg-microservices`)
+
+### 4. Deploy Application
+
+Run **CI/CD Pipeline** workflow to build and deploy.
+
+## Test the API
+
+```bash
+curl 9.163.20.202:80/
+curl curl 9.163.20.202:80/users
+```
+
+## Endpoints
+
+- `/health` - Health check
+- `/` - API info
+- `/users` - List users
+- `/products` - List products
+
+## Optional Monitoring
+
+```bash
 helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
-
-# 2. Update local Helm chart list
 helm repo update
-
-# 3. Create a namespace (recommended)
 kubectl create namespace monitoring
+helm install monitoring-stack prometheus-community/kube-prometheus-stack -n monitoring
+```
 
-# 4. Install the kube-prometheus-stack chart
-helm install monitoring-stack prometheus-community/kube-prometheus-stack --namespace monitoring
-
+Or enable Azure Monitor from the portal.
 
