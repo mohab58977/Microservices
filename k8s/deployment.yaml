@@ -20,9 +20,6 @@ spec:
         ports:
         - containerPort: 5000
           name: http
-        env:
-        - name: FLASK_ENV
-          value: "production"
         resources:
           requests:
             memory: "128Mi"
