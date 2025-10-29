@@ -97,8 +97,8 @@ jobs:
       - name: Set AKS context
         run: |
           az aks get-credentials \
-            --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} \
-            --name ${{ secrets.AZURE_CLUSTER_NAME }} \
+            --resource-group rg-microservices \
+            --name aks-microservices \
             --overwrite-existing
 
       - name: Update deployment image
